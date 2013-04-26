@@ -1,14 +1,9 @@
-require "minitest/spec"
-require "minitest/autorun"
-require "twocheckout"
+require_relative "minitest_helper"
 
 #
 # Sales
 #
 describe Twocheckout::Sale do
-  before do
-    Twocheckout::API.credentials = { :username => 'APIuser1817037', :password => 'APIpass1817037' }
-  end
 
   #retrieve sale
   it "Sale retrieve returns sale" do
@@ -34,7 +29,7 @@ describe Twocheckout::Sale do
 	  sale = Twocheckout::Sale.find(:sale_id => 4786293822)
 	  sale.refund!({:comment => "test refund", :category => 1})
     rescue Exception => e
-	  assert_equal("Invoice was already refunded.", e.message)
+	  assert_equal("Invoice too old to refund.", e.message)
     end
   end
 
@@ -45,7 +40,7 @@ describe Twocheckout::Sale do
 	  invoice = sale.invoices.first
 	  invoice.refund!({:comment => "test refund", :category => 1})
     rescue Exception => e
-	  assert_equal("Invoice was already refunded.", e.message)
+	  assert_equal("Invoice too old to refund.", e.message)
     end
   end
 
@@ -117,9 +112,6 @@ end
 #
 
 describe Twocheckout::Product do
-  before do
-    Twocheckout::API.credentials = { :username => 'APIuser1817037', :password => 'APIpass1817037' }
-  end
 
   # Product list
   it "Product list returns array of products" do
@@ -145,9 +137,6 @@ describe Twocheckout::Product do
 end
 
 describe Twocheckout::Option do
-  before do
-    Twocheckout::API.credentials = { :username => 'APIuser1817037', :password => 'APIpass1817037' }
-  end
 
   # Option list
   it "Option list returns array of options" do
@@ -174,9 +163,6 @@ describe Twocheckout::Option do
 end
 
 describe Twocheckout::Coupon do
-  before do
-    Twocheckout::API.credentials = { :username => 'APIuser1817037', :password => 'APIpass1817037' }
-  end
 
   # Coupon list
   it "Coupon list returns array of coupons" do
