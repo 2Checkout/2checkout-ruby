@@ -2,7 +2,7 @@ module Twocheckout
   class Checkout
 
     def self.form(params={})
-      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/spurchase\" method=\"post\">\n";
+      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
       params.each do |k,v|
         @form = @form + "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v.to_s + "\" />\n"
       end
@@ -10,7 +10,7 @@ module Twocheckout
     end
 
     def self.submit(params={})
-      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/spurchase\" method=\"post\">\n";
+      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
       params.each do |k,v|
         @form = @form + "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v.to_s + "\" />\n"
       end
@@ -18,7 +18,16 @@ module Twocheckout
       @form = @form + "<script type=\"text/javascript\">document.getElementById('2checkout').submit();</script>"
     end
 
-    def self.link(params={}, url="https://www.2checkout.com/checkout/spurchase?")
+    def self.direct(params={})
+      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
+      params.each do |k,v|
+        @form = @form + "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v.to_s + "\" />\n"
+      end
+      @form = @form + "<input type=\"submit\" value=\"Proceed to Checkout\" />\n</form>\n"
+      @form = @form + "<script src=\"https://www.2checkout.com/static/checkout/javascript/direct.min.js\"></script>"
+    end
+
+    def self.link(params={}, url="https://www.2checkout.com/checkout/purchase?")
       @querystring = params.map{|k,v| "#{CGI.escape(k)}=#{CGI.escape(v)}"}.join("&")
       @purchase_url = url + @querystring
     end
