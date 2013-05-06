@@ -219,12 +219,12 @@ describe Twocheckout::Checkout do
 
   #form
   it "Form returns a form" do
-    form = Twocheckout::Checkout.form({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'})
+    form = Twocheckout::Checkout.form({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'}, "Proceed")
     @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
     "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
     "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
     "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
-    "<input type=\"submit\" value=\"Proceed to Checkout\" />\n" +
+    "<input type=\"submit\" value=\"Proceed\" />\n" +
     "</form>"
     assert_equal(form, @form)
   end
