@@ -189,6 +189,13 @@ describe Twocheckout::Coupon do
 end
 
 describe Twocheckout::ValidateResponse do
+  #demo
+  it "Validates Purchase MD5 Hash" do
+    result = Twocheckout::ValidateResponse.purchase({:sid => 1817037, :secret => "tango", :order_number => 1, :total => 0.01,
+                             :key => '1BC47EA0D63EB76496E294F434138AD3'})
+    assert_equal('PASS', result[:code])
+  end
+
   #purchase
   it "Validates Purchase MD5 Hash" do
     result = Twocheckout::ValidateResponse.purchase({:sid => 1817037, :secret => "tango", :order_number => 4789848870, :total => 0.01,

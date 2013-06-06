@@ -9,8 +9,8 @@ module Twocheckout
     end
 
     def self.purchase(options)
-      options[:demo] == 'Y' ? 1 : options[:order_number]
-      if valid?(options[:secret], options[:sid], options[:order_number], options[:total], options[:key])
+      oid = options[:demo] == 'Y' ? 1 : options[:order_number]
+      if valid?(options[:secret], options[:sid], oid, options[:total], options[:key])
         {:code => "PASS", :message => "Hash Matched"}
       else
         {:code => "FAIL", :message => "Hash Mismatch"}
