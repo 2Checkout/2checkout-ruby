@@ -12,7 +12,7 @@ gem install twocheckout
 Or import into your Gemfile.
 
 ```ruby
-gem "twocheckout", "~> 0.1.1"
+gem "twocheckout"
 ```
 
 Full documentation for each binding is provided in the **[Wiki](https://github.com/2checkout/2checkout-ruby/wiki)**.
