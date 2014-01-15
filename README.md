@@ -18,7 +18,93 @@ gem "twocheckout"
 Full documentation for each binding is provided in the **[Wiki](https://github.com/2checkout/2checkout-ruby/wiki)**.
 
 
-Example API Usage
+Example Purchase API Usage
+-----------------
+
+*Example Usage:*
+
+```ruby
+Twocheckout::API.credentials = {
+    :seller_id => '1817037',
+    :private_key => '9999999'
+}
+
+params = {
+    :merchantOrderId     => '123',
+    :token          => 'ZmYyMzMyZGMtZTY2NS00NDAxLTlhYTQtMTgwZWIyZTgwMzQx',
+    :currency       => 'USD',
+    :total          => '1.00',
+    :billingAddr    => {
+        :name => 'Testing Tester',
+        :addrLine1 => '123 Test St',
+        :city => 'Columbus',
+        :state => 'OH',
+        :zipCode => '43123',
+        :country => 'USA',
+        :email => 'cchristenson@2co.com',
+        :phoneNumber => '555-555-5555'
+    }
+}
+
+begin
+  result = Twocheckout::Checkout.authorize(params)
+rescue Exception => e
+  puts e.message
+end
+```
+
+*Example Response:*
+
+```ruby
+#<Twocheckout::Checkout>{
+"type"=>"AuthResponse",
+ "lineItems"=>
+  [{"options"=>[],
+    "price"=>"1.00",
+    "quantity"=>"1",
+    "recurrence"=>nil,
+    "startupFee"=>nil,
+    "productId"=>"",
+    "tangible"=>"N",
+    "name"=>"123",
+    "type"=>"product",
+    "description"=>"",
+    "duration"=>nil}],
+ "transactionId"=>"205180760223",
+ "billingAddr"=>
+  {"addrLine1"=>"123 Test St",
+   "addrLine2"=>nil,
+   "city"=>"Columbus",
+   "zipCode"=>"43123",
+   "phoneNumber"=>"555-555-5555",
+   "phoneExtension"=>nil,
+   "email"=>"cchristenson@2co.com",
+   "name"=>"Testing Tester",
+   "state"=>"OH",
+   "country"=>"USA"},
+ "shippingAddr"=>
+  {"addrLine1"=>nil,
+   "addrLine2"=>nil,
+   "city"=>nil,
+   "zipCode"=>nil,
+   "phoneNumber"=>nil,
+   "phoneExtension"=>nil,
+   "email"=>nil,
+   "name"=>nil,
+   "state"=>nil,
+   "country"=>nil},
+ "merchantOrderId"=>"123",
+ "orderNumber"=>"205180760214",
+ "recurrentInstallmentId"=>nil,
+ "responseMsg"=>"Successfully authorized the provided credit card",
+ "responseCode"=>"APPROVED",
+ "total"=>"1.00",
+ "currencyCode"=>"USD",
+ "errors"=>nil}
+```
+
+
+Example Admin API Usage
 -----------------
 
 *Example Usage:*

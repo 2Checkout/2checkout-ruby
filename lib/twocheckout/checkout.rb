@@ -1,5 +1,5 @@
 module Twocheckout
-  class Checkout
+  class Checkout < HashObject
 
     def self.form(params={}, button_text='Proceed to Checkout')
       @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
@@ -30,6 +30,11 @@ module Twocheckout
     def self.link(params={}, url="https://www.2checkout.com/checkout/purchase?")
       @querystring = params.map{|k,v| "#{CGI.escape(k)}=#{CGI.escape(v)}"}.join("&")
       @purchase_url = url + @querystring
+    end
+
+    def self.authorize(params={})
+      response = Twocheckout::API.request(:post, 'authService', params)
+      response['response']
     end
   end
 end

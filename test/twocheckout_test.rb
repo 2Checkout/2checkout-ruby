@@ -272,4 +272,30 @@ describe Twocheckout::Checkout do
     @link = "https://www.2checkout.com/checkout/purchase?sid=1817037&cart_order_id=Example+Sale&total=1.00"
     assert_equal(link, @link)
   end
+
+  #authorize
+  it "Authorize creates authorization" do
+    params = {
+        :merchantOrderId     => '123',
+        :token          => 'ZThjM2U3ZjMtMjViYy00ZTAwLWJiY2MtMDgzNTEzODZhZTFh',
+        :currency       => 'USD',
+        :total          => '1.00',
+        :billingAddr    => {
+            :name => 'Testing Tester',
+            :addrLine1 => '123 Test St',
+            :city => 'Columbus',
+            :state => 'OH',
+            :zipCode => '43123',
+            :country => 'USA',
+            :email => 'cchristenson@2co.com',
+            :phoneNumber => '555-555-5555'
+        }
+    }
+    begin
+      result = Twocheckout::Checkout.authorize(params)
+      assert_equal("APPROVED", result['responseCode'])
+    rescue Exception => e
+      assert_equal("Unauthorized", e.message)
+    end
+  end
 end
