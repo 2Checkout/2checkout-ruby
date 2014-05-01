@@ -1,8 +1,14 @@
 module Twocheckout
   class Checkout < HashObject
 
+    @checkout_url = 'https://www.2checkout.com/checkout/purchase'
+
+    def self.sandbox(sandbox)
+      @checkout_url = sandbox ? 'https://sandbox.2checkout.com/checkout/purchase' : @checkout_url;
+    end
+
     def self.form(params={}, button_text='Proceed to Checkout')
-      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
+      @form = "<form id=\"2checkout\" action=\"#{@checkout_url}\" method=\"post\">\n";
       params.each do |k,v|
         @form = @form + "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v.to_s + "\" />\n"
       end
@@ -10,7 +16,7 @@ module Twocheckout
     end
 
     def self.submit(params={})
-      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
+      @form = "<form id=\"2checkout\" action=\"#{@checkout_url}\" method=\"post\">\n";
       params.each do |k,v|
         @form = @form + "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v.to_s + "\" />\n"
       end
@@ -19,7 +25,7 @@ module Twocheckout
     end
 
     def self.direct(params={}, button_text='Proceed to Checkout')
-      @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n";
+      @form = "<form id=\"2checkout\" action=\"#{@checkout_url}\" method=\"post\">\n";
       params.each do |k,v|
         @form = @form + "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v.to_s + "\" />\n"
       end
@@ -27,9 +33,9 @@ module Twocheckout
       @form = @form + "<script src=\"https://www.2checkout.com/static/checkout/javascript/direct.min.js\"></script>"
     end
 
-    def self.link(params={}, url="https://www.2checkout.com/checkout/purchase?")
+    def self.link(params={})
       @querystring = params.map{|k,v| "#{CGI.escape(k)}=#{CGI.escape(v)}"}.join("&")
-      @purchase_url = url + @querystring
+      @purchase_url = @checkout_url + '?' + @querystring
     end
 
     def self.authorize(params={})
