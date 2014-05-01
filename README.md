@@ -15,7 +15,7 @@ Or import into your Gemfile.
 gem "twocheckout"
 ```
 
-Full documentation for each binding is provided in the **[2Checkout Documentation](https://github.com/2checkout/2checkout-ruby/wiki)**.
+Full documentation for each binding is provided in the **[2Checkout Documentation](https://www.2checkout.com/documentation/libraries/ruby)**.
 
 
 Example Purchase API Usage
@@ -284,4 +284,4 @@ end
 "Lineitem is not scheduled to recur."
 ```
 
-Full documentation for each binding is provided in the **[2Checkout Documentation](https://github.com/2checkout/2checkout-ruby/wiki)**.
+Full documentation for each binding is provided in the **[2Checkout Documentation](https://www.2checkout.com/documentation/libraries/ruby)**.
