@@ -24,57 +24,57 @@ describe Twocheckout::Sale do
   end
 
   #refund sale
-  it "Refunding a refunded sale returns exception" do
+  it "Refunding a refunded sale returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       sale.refund!({:comment => "test refund", :category => 1})
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Invoice was already refunded.", e.message)
     end
   end
 
   #refund invoice
-  it "Refunding a refunded invoice returns exception" do
+  it "Refunding a refunded invoice returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       invoice = sale.invoices.first
       invoice.refund!({:comment => "test refund", :category => 1})
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Invoice was already refunded.", e.message)
     end
   end
 
   #refund lineitem
-  it "Refunding a refunded lineitem returns exception" do
+  it "Refunding a refunded lineitem returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       first_invoice = sale.invoices.first
       last_lineitem = first_invoice.lineitems.last
       last_lineitem.refund!({:comment => "test refund", :category => 1})
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("This lineitem cannot be refunded.", e.message)
     end
   end
 
   #stop recurring lineitem
-  it "Stopping a stopped recurring lineitem returns exception" do
+  it "Stopping a stopped recurring lineitem returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       result = sale.stop_recurring!
       assert_equal(result, [])
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Lineitem is not scheduled to recur.", e.message)
     end
   end
 
   #stop recurring sale
-  it "Stopping a stopped recurring sale returns exception" do
+  it "Stopping a stopped recurring sale returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       last_invoice = sale.invoices.last
       last_lineitem = last_invoice.lineitems.last
       last_lineitem.stop_recurring!
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Lineitem is not scheduled to recur.", e.message)
     end
   end
@@ -87,21 +87,21 @@ describe Twocheckout::Sale do
   end
 
   #mark shipped
-  it "Shipping an intangible sale returns exception" do
+  it "Shipping an intangible sale returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       sale.ship({:tracking_number => "123"})
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Sale already marked shipped.", e.message)
     end
   end
 
   #reauth
-  it "Reauthorizing a pending sale returns exception" do
+  it "Reauthorizing a pending sale returns Twocheckout::TwocheckoutError" do
     begin
       sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
       sale.reauth
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Payment is already pending or deposited and cannot be reauthorized.", e.message)
     end
   end
@@ -294,7 +294,7 @@ describe Twocheckout::Checkout do
     begin
       result = Twocheckout::Checkout.authorize(params)
       assert_equal("APPROVED", result['responseCode'])
-    rescue Exception => e
+    rescue Twocheckout::TwocheckoutError => e
       assert_equal("Unauthorized", e.message)
     end
   end

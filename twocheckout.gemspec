@@ -4,7 +4,7 @@ $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'twocheckout'
-  s.version     = '0.3.0'
+  s.version     = '0.3.1'
   s.summary     = '2Checkout Ruby Library'
   s.description = '0.3.0'
   s.summary     = '2Checkout Ruby Library'
