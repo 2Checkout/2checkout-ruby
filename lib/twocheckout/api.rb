@@ -8,11 +8,11 @@ module Twocheckout
     API_VERSION = '1'
 
     def self.credentials=(opts)
-      @@username = opts[:username]
-      @@password = opts[:password]
-      @@private_key = opts[:private_key]
-      @@seller_id = opts[:seller_id]
-      @@sandbox = opts[:sandbox]
+      @username = opts[:username]
+      @password = opts[:password]
+      @private_key = opts[:private_key]
+      @seller_id = opts[:seller_id]
+      @sandbox = opts[:sandbox]
     end
 
     def self.request(http_method, api_call, params = nil)
@@ -33,11 +33,11 @@ module Twocheckout
     private
 
     def self.set_opts(http_method, api_call, params = null)
-      url = @@sandbox ? SANDBOX_BASE : PROD_BASE
+      url = @sandbox ? SANDBOX_BASE : PROD_BASE
       if api_call == 'authService'
-        url += '/checkout/api/' + API_VERSION + '/' + @@seller_id + '/rs/' + api_call
-        params['sellerId'] = @@seller_id
-        params['privateKey'] = @@private_key
+        url += '/checkout/api/' + API_VERSION + '/' + @seller_id + '/rs/' + api_call
+        params['sellerId'] = @seller_id
+        params['privateKey'] = @private_key
         opts = {
           :method => http_method,
           :url => url,
@@ -63,8 +63,8 @@ module Twocheckout
               :content_type => :json,
               :user_agent => "2Checkout/Ruby/," + Twocheckout::VERSION
           },
-          :user => @@username,
-          :password => @@password,
+          :user => @username,
+          :password => @password,
           :payload => params,
         }
       end
