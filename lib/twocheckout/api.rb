@@ -23,7 +23,7 @@ module Twocheckout
       rescue => e
         error_hash = JSON.parse(e.response)
         if error_hash['exception']
-          raise TwocheckoutError.new(error_hash['exception']['errorMsg'])
+          raise TwocheckoutError.new(error_hash['exception']['errorMsg'], error_hash['exception']['errorCode'])
         else
           raise TwocheckoutError.new(error_hash['errors'][0]['message'])
         end
