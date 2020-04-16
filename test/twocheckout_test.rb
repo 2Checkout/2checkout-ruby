@@ -95,16 +95,6 @@ describe Twocheckout::Sale do
       assert_equal("Sale already marked shipped.", e.message)
     end
   end
-
-  #reauth
-  it "Reauthorizing a pending sale returns Twocheckout::TwocheckoutError" do
-    begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
-      sale.reauth
-    rescue Twocheckout::TwocheckoutError => e
-      assert_equal("Payment is already pending or deposited and cannot be reauthorized.", e.message)
-    end
-  end
 end
 
 #
@@ -215,7 +205,7 @@ describe Twocheckout::Checkout do
   #submit
   it "Submit return a form + JS to submit" do
     form = Twocheckout::Checkout.submit({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'})
-    @form = "<form id=\"2checkout\" action=\"https://sandbox.2checkout.com/checkout/purchase\" method=\"post\">\n" +
+    @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
       "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
       "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
       "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
@@ -227,7 +217,7 @@ describe Twocheckout::Checkout do
   #form
   it "Form returns a form" do
     form = Twocheckout::Checkout.form({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'}, "Proceed")
-    @form = "<form id=\"2checkout\" action=\"https://sandbox.2checkout.com/checkout/purchase\" method=\"post\">\n" +
+    @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
       "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
       "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
       "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
@@ -249,7 +239,7 @@ describe Twocheckout::Checkout do
                                           'country' => 'USA',
                                           'email' => 'no-reply@2co.com'
     })
-    @form = "<form id=\"2checkout\" action=\"https://sandbox.2checkout.com/checkout/purchase\" method=\"post\">\n" +
+    @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
       "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
       "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
       "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
@@ -269,7 +259,7 @@ describe Twocheckout::Checkout do
   #link
   it "Link returns a link" do
     link = Twocheckout::Checkout.link({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'})
-    @link = "https://sandbox.2checkout.com/checkout/purchase?sid=1817037&cart_order_id=Example+Sale&total=1.00"
+    @link = "https://www.2checkout.com/checkout/purchase?sid=1817037&cart_order_id=Example+Sale&total=1.00"
     assert_equal(link, @link)
   end
 

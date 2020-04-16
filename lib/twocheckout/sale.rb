@@ -76,13 +76,6 @@ module Twocheckout
     end
 
     #
-    # Reauthorize sale
-    #
-    def reauth
-      Twocheckout::API.request(:post, 'sales/reauth', sale_id: self.sale_id)
-    end
-
-    #
     # Get sale list in an array
     #
     def self.list(opts)
