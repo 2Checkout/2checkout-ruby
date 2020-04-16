@@ -3,8 +3,8 @@ require 'json'
 
 module Twocheckout
   class API
-    PROD_BASE = 'https://www.2checkout.com'
-    API_VERSION = '1'
+    PROD_BASE = 'https://www.2checkout.com'.freeze
+    API_VERSION = '1'.freeze
 
     def self.credentials=(opts)
       @username = opts[:username]

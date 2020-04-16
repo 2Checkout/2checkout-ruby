@@ -2,8 +2,8 @@ require "minitest/autorun"
 require "twocheckout"
 
 Twocheckout::API.credentials = {
-    :username => 'testlibraryapi901248204',
-    :password => 'testlibraryapi901248204PASS',
-    :seller_id => '901248204',
-    :private_key => 'BE632CB0-BB29-11E3-AFB6-D99C28100996',
+    :username => 'test_api_250111206876',
+    :password => 'Qwerty123',
+    :seller_id => '250111206876',
+    :private_key => '1D336D05-05AA-40A4-AEF6-DF58D222E6F4',
 }
