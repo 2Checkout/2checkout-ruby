@@ -7,14 +7,14 @@ describe Twocheckout::Sale do
 
   #retrieve sale
   it "Sale retrieve returns sale" do
-    sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
-    assert_equal('9093717691800', sale.sale_id)
+    sale = Twocheckout::Sale.find(:sale_id => 250335346812)
+    assert_equal('250335346812', sale.sale_id)
   end
 
   #retrieve invoice
   it "Sale retrieve returns invoice" do
-    invoice = Twocheckout::Sale.find({:invoice_id => 9093717691821})
-    assert_equal('9093717691821', invoice.invoice_id)
+    invoice = Twocheckout::Sale.find({:invoice_id => 250334725631})
+    assert_equal('250334725631', invoice.invoice_id)
   end
 
   #retrieve sale list
@@ -26,40 +26,40 @@ describe Twocheckout::Sale do
   #refund sale
   it "Refunding a refunded sale returns Twocheckout::TwocheckoutError" do
     begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+      sale = Twocheckout::Sale.find(:sale_id => 250335365202)
       sale.refund!({:comment => "test refund", :category => 1})
     rescue Twocheckout::TwocheckoutError => e
-      assert_equal("Invoice was already refunded.", e.message)
+      assert_equal("Amount greater than remaining balance on invoice.", e.message)
     end
   end
 
   #refund invoice
   it "Refunding a refunded invoice returns Twocheckout::TwocheckoutError" do
     begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+      sale = Twocheckout::Sale.find(:sale_id => 250335365202)
       invoice = sale.invoices.first
       invoice.refund!({:comment => "test refund", :category => 1})
     rescue Twocheckout::TwocheckoutError => e
-      assert_equal("Invoice was already refunded.", e.message)
+      assert_equal("Amount greater than remaining balance on invoice.", e.message)
     end
   end
 
   #refund lineitem
   it "Refunding a refunded lineitem returns Twocheckout::TwocheckoutError" do
     begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+      sale = Twocheckout::Sale.find(:sale_id => 250192108517)
       first_invoice = sale.invoices.first
       last_lineitem = first_invoice.lineitems.last
       last_lineitem.refund!({:comment => "test refund", :category => 1})
     rescue Twocheckout::TwocheckoutError => e
-      assert_equal("This lineitem cannot be refunded.", e.message)
+      assert_equal("Lineitem amount greater than remaining balance on invoice.", e.message)
     end
   end
 
   #stop recurring lineitem
   it "Stopping a stopped recurring lineitem returns Twocheckout::TwocheckoutError" do
     begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+      sale = Twocheckout::Sale.find(:sale_id => 250192108517)
       result = sale.stop_recurring!
       assert_equal(result, [])
     rescue Twocheckout::TwocheckoutError => e
@@ -70,7 +70,7 @@ describe Twocheckout::Sale do
   #stop recurring sale
   it "Stopping a stopped recurring sale returns Twocheckout::TwocheckoutError" do
     begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+      sale = Twocheckout::Sale.find(:sale_id => 250192108517)
       last_invoice = sale.invoices.last
       last_lineitem = last_invoice.lineitems.last
       last_lineitem.stop_recurring!
@@ -81,7 +81,7 @@ describe Twocheckout::Sale do
 
   #create comment
   it "Creates a sale comment" do
-    sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+    sale = Twocheckout::Sale.find(:sale_id => 250334624367)
     result = sale.comment({:sale_comment => "test"})
     assert_equal('Created comment successfully.', result['response_message'])
   end
@@ -89,20 +89,10 @@ describe Twocheckout::Sale do
   #mark shipped
   it "Shipping an intangible sale returns Twocheckout::TwocheckoutError" do
     begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
+      sale = Twocheckout::Sale.find(:sale_id => 250335377097)
       sale.ship({:tracking_number => "123"})
     rescue Twocheckout::TwocheckoutError => e
       assert_equal("Sale already marked shipped.", e.message)
-    end
-  end
-
-  #reauth
-  it "Reauthorizing a pending sale returns Twocheckout::TwocheckoutError" do
-    begin
-      sale = Twocheckout::Sale.find(:sale_id => 9093717691800)
-      sale.reauth
-    rescue Twocheckout::TwocheckoutError => e
-      assert_equal("Payment is already pending or deposited and cannot be reauthorized.", e.message)
     end
   end
 end
@@ -136,60 +126,8 @@ describe Twocheckout::Product do
   end
 end
 
-describe Twocheckout::Option do
-
-  # Option list
-  it "Option list returns array of options" do
-    option_list = Twocheckout::Option.list({ :pagesize => 3 })
-    assert_equal(3, option_list.size)
-  end
-
-  # Option CRUD
-  it "Option create, find, update, delete is successful" do
-    # create
-    new_option = Twocheckout::Option.create({:option_name => "test option",
-                                             :option_value_name => "test option value", :option_value_surcharge => 1.00})
-    assert_equal("test option", new_option.option_name)
-    # find
-    option = Twocheckout::Option.find({:option_id => new_option.option_id})
-    assert_equal(new_option.option_id, option.option_id)
-    # update
-    option = option.update({:option_name => "new name"})
-    assert_equal("new name", option.option_name)
-    # delete
-    result = option.delete!
-    assert_equal("Option deleted successfully", result['response_message'])
-  end
-end
-
-describe Twocheckout::Coupon do
-
-  # Coupon list
-  it "Coupon list returns array of coupons" do
-    coupon_list = Twocheckout::Coupon.list({ :pagesize => 4 })
-    assert_equal(4, coupon_list.size)
-  end
-
-  # Coupon CRUD
-  it "Coupon create, find, update, delete is successful" do
-    # create
-    new_coupon = Twocheckout::Coupon.create({:date_expire => "2020-01-01",
-                                             :type => "shipping", :minimum_purchase => 1.00})
-    assert_equal("2020-01-01", new_coupon.date_expire)
-    # find
-    coupon = Twocheckout::Coupon.find({:coupon_code => new_coupon.coupon_code})
-    assert_equal(new_coupon.coupon_code, coupon.coupon_code)
-    # update
-    coupon = coupon.update({:date_expire => "2020-01-02"})
-    assert_equal("2020-01-02", coupon.date_expire)
-    # delete
-    result = coupon.delete!
-    assert_equal("Coupon successfully deleted.", result['response_message'])
-  end
-end
-
 describe Twocheckout::ValidateResponse do
-  #demo
+
   it "Validates Purchase MD5 Hash" do
     result = Twocheckout::ValidateResponse.purchase({:sid => 1817037, :secret => "tango", :order_number => 1, :total => 0.01,
                                                      :key => '1BC47EA0D63EB76496E294F434138AD3'})
@@ -215,7 +153,7 @@ describe Twocheckout::Checkout do
   #submit
   it "Submit return a form + JS to submit" do
     form = Twocheckout::Checkout.submit({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'})
-    @form = "<form id=\"2checkout\" action=\"https://sandbox.2checkout.com/checkout/purchase\" method=\"post\">\n" +
+    @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
       "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
       "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
       "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
@@ -227,7 +165,7 @@ describe Twocheckout::Checkout do
   #form
   it "Form returns a form" do
     form = Twocheckout::Checkout.form({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'}, "Proceed")
-    @form = "<form id=\"2checkout\" action=\"https://sandbox.2checkout.com/checkout/purchase\" method=\"post\">\n" +
+    @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
       "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
       "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
       "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
@@ -249,7 +187,7 @@ describe Twocheckout::Checkout do
                                           'country' => 'USA',
                                           'email' => 'no-reply@2co.com'
     })
-    @form = "<form id=\"2checkout\" action=\"https://sandbox.2checkout.com/checkout/purchase\" method=\"post\">\n" +
+    @form = "<form id=\"2checkout\" action=\"https://www.2checkout.com/checkout/purchase\" method=\"post\">\n" +
       "<input type=\"hidden\" name=\"sid\" value=\"1817037\" />\n" +
       "<input type=\"hidden\" name=\"cart_order_id\" value=\"Example Sale\" />\n" +
       "<input type=\"hidden\" name=\"total\" value=\"1.00\" />\n" +
@@ -269,7 +207,7 @@ describe Twocheckout::Checkout do
   #link
   it "Link returns a link" do
     link = Twocheckout::Checkout.link({ 'sid' => '1817037', 'cart_order_id' => 'Example Sale', 'total' => '1.00'})
-    @link = "https://sandbox.2checkout.com/checkout/purchase?sid=1817037&cart_order_id=Example+Sale&total=1.00"
+    @link = "https://www.2checkout.com/checkout/purchase?sid=1817037&cart_order_id=Example+Sale&total=1.00"
     assert_equal(link, @link)
   end
 
@@ -277,11 +215,12 @@ describe Twocheckout::Checkout do
   it "Authorize creates authorization" do
     params = {
       :merchantOrderId     => '123',
-      :token          => 'MjQ3YTM2NDEtMmNiNC00ZGM3LTljZDItZjIxMzllYWE5ZmNl',
+      :token          => 'OWM5OTAxM2YtNDhiMC00YjMyLTlkNDQtOWQ5MGRlOGExNDE0',
       :currency       => 'USD',
       :total          => '1.00',
+      :demo => true,
       :billingAddr    => {
-        :name => 'Testing Tester',
+        :name => 'John Doe',
         :addrLine1 => '123 Test St',
         :city => 'Columbus',
         :state => 'OH',

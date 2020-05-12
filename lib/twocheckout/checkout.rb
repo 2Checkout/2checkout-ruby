@@ -3,10 +3,6 @@ module Twocheckout
 
     @checkout_url = 'https://www.2checkout.com/checkout/purchase'
 
-    def self.sandbox(sandbox)
-      @checkout_url = sandbox ? 'https://sandbox.2checkout.com/checkout/purchase' : @checkout_url;
-    end
-
     def self.form(params={}, button_text='Proceed to Checkout')
       @form = "<form id=\"2checkout\" action=\"#{@checkout_url}\" method=\"post\">\n";
       params.each do |k,v|
